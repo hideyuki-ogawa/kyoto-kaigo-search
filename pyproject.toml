@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "kyoto-kaigo-search"
+version = "0.1.0"
+description = "京都市の介護施設の情報を探せます。"
+authors = ["hideyuki-ogawa <hogawa098@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.38.0"
+pandas = "^2.2.2"
+requests = "^2.32.3"
+folium = "^0.17.0"
+streamlit-folium = "^0.22.1"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+black = "^24.8.0"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
