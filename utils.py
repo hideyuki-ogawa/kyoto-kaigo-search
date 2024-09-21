@@ -65,12 +65,12 @@ def draw_map(df: pd.DataFrame):
     df1 = df.dropna()
     if df.empty | df1.empty:
         return st.write('位置情報が見つかりませんでした。')
-    center = df.iloc[0, -1], df.iloc[0, -2]
+    center = df1.iloc[0, -1], df.iloc[0, -2]
     print(center)
     m = folium.Map(location=center, zoom_start=12, height=300, width=700)
-    for i in range(len(df)):
-        position = df.iloc[i, -1], df.iloc[i, -2]
-        name = df.iloc[i, 3]
+    for i in range(len(df1)):
+        position = df1.iloc[i, -1], df1.iloc[i, -2]
+        name = df1.iloc[i, 3]
         folium.Marker(
             position, popup=name, tooltip=name
         ).add_to(m)
