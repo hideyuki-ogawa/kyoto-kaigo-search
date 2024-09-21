@@ -4,7 +4,7 @@ import folium
 import pandas as pd
 import requests
 import streamlit as st
-from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 
 
 def search_latlon(address: str) -> list[float, float]:
@@ -19,8 +19,13 @@ def search_latlon(address: str) -> list[float, float]:
     try:
         r = requests.get(url, params=params)
         r.raise_for_status()
-        coords = r.json()[0]["geometry"]["coordinates"]
-        return coords[0], coords[1]
+        response_data = r.json()
+        if response_data and 'geometry' in response_data[0]:
+            coords = r.json()[0]["geometry"]["coordinates"]
+            return coords[0], coords[1]
+        else:
+            print(f'緯度経度が見つかりません: {address}')
+            return None, None
     except requests.exceptions.RequestException as e:
         print(f"エラーが発生しました: {e}")
         return None, None
@@ -57,9 +62,9 @@ def add_latlon(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def draw_map(df: pd.DataFrame):
-
-    if df.empty:
-        return 
+    df1 = df.dropna()
+    if df.empty | df1.empty:
+        return st.write('位置情報が見つかりませんでした。')
     center = df.iloc[0, -1], df.iloc[0, -2]
     print(center)
     m = folium.Map(location=center, zoom_start=12, height=300, width=700)
@@ -69,5 +74,5 @@ def draw_map(df: pd.DataFrame):
         folium.Marker(
             position, popup=name, tooltip=name
         ).add_to(m)
-    st_map = st_folium(m, height=300)
+    st_map = folium_static(m, height=300)
 
